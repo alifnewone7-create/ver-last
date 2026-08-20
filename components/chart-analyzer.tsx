@@ -576,7 +576,15 @@ function ResultBlock({ result }: { result: AnalysisResult }) {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-3 flex flex-col gap-4 duration-500">
-      <div className="border-luxe surface-luxe card-corner-glow relative overflow-hidden rounded-3xl p-4 sm:p-6">
+      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-b from-[#12150A] via-[#0C0E07] to-[#080A06] p-4 sm:p-6">
+        <span
+          aria-hidden
+          className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[#CCFF00]/50 to-transparent"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[#CCFF00]/[0.07] blur-3xl"
+        />
         <div className="relative z-10 flex flex-col gap-5">
           {/* Pair header */}
           <div className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both flex items-center justify-between gap-3 duration-500">
@@ -584,15 +592,15 @@ function ResultBlock({ result }: { result: AnalysisResult }) {
               {hasFlags ? (
                 <PairFlags base={base} quote={quote} size={30} />
               ) : (
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-accent/12">
-                  <TrendingUp className="h-5 w-5 text-accent" />
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#CCFF00]/25 bg-[#0A0C08] shadow-[0_0_18px_rgba(204,255,0,0.12)]">
+                  <TrendingUp className="h-5 w-5 text-[#CCFF00]" />
                 </span>
               )}
               <div className="min-w-0">
-                <p className="truncate text-lg font-bold tracking-tight">
+                <p className="font-display truncate text-lg font-semibold tracking-tight text-white">
                   {description.pair || 'Chart'}
                 </p>
-                <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-accent">
+                <span className="font-display flex items-center gap-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[#CCFF00]">
                   <span
                     className={cn(
                       'status-dot',
@@ -627,7 +635,7 @@ function ResultBlock({ result }: { result: AnalysisResult }) {
 
           {/* Directional signal card — aurora beacon (unique animated luxury) */}
           {isNoTrade ? (
-            <div className="animate-in fade-in zoom-in-95 fill-mode-both relative overflow-hidden rounded-[26px] border border-border bg-input/30 p-5 delay-100 duration-500 sm:p-6">
+            <div className="animate-in fade-in zoom-in-95 fill-mode-both relative overflow-hidden rounded-[26px] border border-white/[0.08] bg-gradient-to-b from-[#12150A] via-[#0C0E07] to-[#080A06] p-5 delay-100 duration-500 sm:p-6">
               <div className="flex items-center gap-4 sm:gap-5">
                 <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-muted-foreground/10 ring-1 ring-border sm:h-20 sm:w-20">
                   <MinusCircle className="h-8 w-8 text-muted-foreground sm:h-10 sm:w-10" strokeWidth={2.25} />
@@ -700,26 +708,30 @@ function ResultBlock({ result }: { result: AnalysisResult }) {
           )}
 
           {/* Confidence meter */}
-          <div className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both rounded-2xl border border-border/60 bg-input/20 px-4 py-3.5 delay-200 duration-500">
-            <div className="mb-2.5 flex items-end justify-between">
+          <div className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-b from-[#12150A] via-[#0C0E07] to-[#080A06] px-4 py-3.5 transition-[border-color,box-shadow] delay-200 duration-500 hover:border-[#CCFF00]/35 hover:shadow-[0_12px_40px_-16px_rgba(204,255,0,0.25)]">
+            <span
+              aria-hidden
+              className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#CCFF00]/50 to-transparent"
+            />
+            <div className="relative z-10 mb-2.5 flex items-end justify-between">
               <div className="flex flex-col">
-                <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                <span className="font-display text-[0.62rem] uppercase tracking-[0.2em] text-zinc-500">
                   Confidence
                 </span>
                 <span
                   className={cn(
-                    'text-xs font-semibold',
-                    confidence >= 75 ? 'text-up' : confidence >= 50 ? 'text-accent' : 'text-muted-foreground',
+                    'font-display text-xs font-semibold',
+                    confidence >= 75 ? 'text-up' : confidence >= 50 ? 'text-[#CCFF00]' : 'text-zinc-500',
                   )}
                 >
                   {confLabel}
                 </span>
               </div>
-              <span className="text-gradient font-mono text-2xl font-bold tabular-nums">
+              <span className="font-mono text-2xl font-bold tabular-nums text-[#CCFF00]">
                 {confidence}%
               </span>
             </div>
-            <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-input/50">
+            <div className="relative z-10 h-2.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
               <div
                 className={cn(
                   'relative h-full rounded-full transition-[width] duration-1000 ease-out',
@@ -733,8 +745,12 @@ function ResultBlock({ result }: { result: AnalysisResult }) {
           </div>
 
           {/* Support / Resistance range */}
-          <div className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both rounded-2xl border border-border/60 bg-input/20 px-4 py-3.5 delay-300 duration-500">
-            <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-wide">
+          <div className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-b from-[#12150A] via-[#0C0E07] to-[#080A06] px-4 py-3.5 transition-[border-color,box-shadow] delay-300 duration-500 hover:border-[#CCFF00]/35 hover:shadow-[0_12px_40px_-16px_rgba(204,255,0,0.25)]">
+            <span
+              aria-hidden
+              className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#CCFF00]/50 to-transparent"
+            />
+            <div className="font-display relative z-10 mb-2 flex items-center justify-between text-[0.62rem] uppercase tracking-[0.2em]">
               <span className="flex items-center gap-1 text-down">
                 <ArrowDown className="h-3 w-3" /> Support
               </span>
@@ -742,13 +758,13 @@ function ResultBlock({ result }: { result: AnalysisResult }) {
                 Resistance <ArrowUp className="h-3 w-3" />
               </span>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="relative z-10 flex items-center gap-3">
               <span className="font-mono text-sm font-bold text-down">
                 {analysis.support || '—'}
               </span>
-              <div className="relative h-1.5 flex-1 rounded-full bg-gradient-to-r from-down/60 via-accent/40 to-up/60">
-                <span className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 animate-ping rounded-full bg-accent/70" />
-                <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent" />
+              <div className="relative h-1.5 flex-1 rounded-full bg-gradient-to-r from-down/60 via-[#CCFF00]/40 to-up/60">
+                <span className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 animate-ping rounded-full bg-[#CCFF00]/70" />
+                <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#CCFF00]" />
               </div>
               <span className="font-mono text-sm font-bold text-up">
                 {analysis.resistance || '—'}
@@ -758,8 +774,8 @@ function ResultBlock({ result }: { result: AnalysisResult }) {
 
           {/* Read stat tiles */}
           <div className="grid grid-cols-2 gap-2.5">
-            <StatTile icon={Waypoints} label="Trend" value={description.trend} delay={350} tone="emerald" />
-            <StatTile icon={Scan} label="Pattern" value={description.candlePattern} delay={420} tone="gold" />
+            <StatTile icon={Waypoints} label="Trend" value={description.trend} delay={350} />
+            <StatTile icon={Scan} label="Pattern" value={description.candlePattern} delay={420} />
           </div>
 
           {/* Compact entry point for supporting analysis details */}
@@ -769,25 +785,36 @@ function ResultBlock({ result }: { result: AnalysisResult }) {
             <button
               type="button"
               onClick={() => setDetailsOpen(true)}
-              className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both group relative flex w-full items-center justify-between gap-4 overflow-hidden rounded-2xl border border-primary/35 bg-gradient-to-br from-primary/12 via-primary/8 to-transparent p-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-all delay-[440ms] duration-300 hover:-translate-y-0.5 hover:border-primary/55 hover:from-primary/12 hover:via-primary/12"
+              className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both group relative flex w-full items-center justify-between gap-4 overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-b from-[#12150A] via-[#0C0E07] to-[#080A06] p-4 text-left transition-[border-color,transform,box-shadow] delay-[440ms] duration-300 hover:-translate-y-0.5 hover:border-[#CCFF00]/35 hover:shadow-[0_12px_40px_-16px_rgba(204,255,0,0.25)]"
               aria-haspopup="dialog"
             >
-              <span className="pointer-events-none absolute -right-8 -top-10 h-24 w-24 rounded-full bg-primary/12 blur-2xl transition-opacity duration-300 group-hover:opacity-80" />
-              <span className="relative flex min-w-0 items-center gap-3">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-primary/35 bg-gradient-to-br from-primary/40 via-primary/12 to-primary/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]">
-                  <Gauge className="icon-float h-5 w-5 text-primary" />
+              <span
+                aria-hidden
+                className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#CCFF00]/50 to-transparent"
+              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -right-10 -top-12 h-28 w-28 rounded-full bg-[#CCFF00]/[0.07] blur-2xl opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+              />
+              <span className="relative z-10 flex min-w-0 items-center gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#CCFF00]/25 bg-[#0A0C08] text-[#CCFF00] shadow-[0_0_18px_rgba(204,255,0,0.12)] transition-transform duration-300 group-hover:scale-105">
+                  <Gauge className="icon-float h-5 w-5" />
                 </span>
                 <span className="min-w-0">
-                  <span className="block text-sm font-bold">Analysis Details</span>
-                  <span className="block truncate text-xs text-muted-foreground">
+                  <span className="font-display block text-sm font-semibold text-white">Analysis Details</span>
+                  <span className="font-display block truncate text-xs font-light text-zinc-400">
                     Structure · Indicators · Scores
                   </span>
                 </span>
               </span>
-              <span className="relative flex shrink-0 items-center gap-1.5 rounded-full border border-primary/35 bg-gradient-to-r from-primary/12 to-primary/12 px-3 py-1.5 text-xs font-semibold text-primary transition-all group-hover:from-primary/35 group-hover:to-primary/12">
+              <span className="font-display relative z-10 flex shrink-0 items-center gap-1.5 rounded-full border border-[#CCFF00]/35 bg-[#CCFF00]/10 px-3 py-1.5 text-xs font-semibold text-[#CCFF00] transition-colors duration-300 group-hover:bg-[#CCFF00]/20">
                 See all
                 <ChevronRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
               </span>
+              <span
+                aria-hidden
+                className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#CCFF00]/70 to-transparent transition-[width] duration-500 group-hover:w-full"
+              />
             </button>
           )}
 
@@ -852,16 +879,29 @@ function AnalysisDetailsPopup({
         onClick={onClose}
         aria-label="Close analysis details"
       />
-      <div className="border-luxe surface-luxe card-corner-glow relative z-10 w-full max-w-lg overflow-hidden rounded-3xl">
+      <div className="animate-in fade-in zoom-in-95 relative z-10 w-full max-w-lg overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-b from-[#12150A] via-[#0C0E07] to-[#080A06] shadow-[0_24px_80px_-24px_rgba(204,255,0,0.18)] duration-300">
+        <span
+          aria-hidden
+          className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#CCFF00]/50 to-transparent"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[#CCFF00]/[0.07] blur-3xl"
+        />
         <div className="relative z-10 flex max-h-[82vh] flex-col">
-          <div className="flex items-center justify-between gap-4 border-b border-border/60 px-5 py-4 sm:px-6">
-            <div>
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-accent">
-                Full breakdown
-              </p>
-              <h2 id="analysis-details-title" className="text-lg font-bold tracking-tight">
-                Analysis Details
-              </h2>
+          <div className="flex items-center justify-between gap-4 border-b border-white/[0.08] px-5 py-4 sm:px-6">
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#CCFF00]/25 bg-[#0A0C08] text-[#CCFF00] shadow-[0_0_18px_rgba(204,255,0,0.12)]">
+                <Gauge className="h-4 w-4" />
+              </span>
+              <div className="min-w-0">
+                <p className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-[#CCFF00]">
+                  Full breakdown
+                </p>
+                <h2 id="analysis-details-title" className="font-display truncate text-lg font-semibold tracking-tight text-white">
+                  Analysis Details
+                </h2>
+              </div>
             </div>
             <Button
               type="button"
@@ -875,23 +915,31 @@ function AnalysisDetailsPopup({
 
           <div className="flex flex-col gap-3 overflow-y-auto p-4 sm:p-5">
             {marketStructure && (
-              <section className="rounded-2xl border border-border/60 bg-input/20 p-4">
-                <p className="mb-1.5 flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-muted-foreground">
-                  <GitBranch className="h-3 w-3 text-accent" />
+              <section className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0C0E07] p-4">
+                <span
+                  aria-hidden
+                  className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#CCFF00]/40 to-transparent"
+                />
+                <p className="font-display mb-1.5 flex items-center gap-1.5 text-[0.62rem] uppercase tracking-[0.2em] text-zinc-500">
+                  <GitBranch className="h-3 w-3 text-[#CCFF00]" />
                   Market Structure
                 </p>
-                <p className="text-pretty text-sm leading-relaxed">{marketStructure}</p>
+                <p className="text-pretty text-sm font-light leading-relaxed text-zinc-300">{marketStructure}</p>
               </section>
             )}
             <IndicatorsCard raw={indicators} />
             <ProbabilityScores raw={scores} />
             {reasoning && (
-              <section className="rounded-2xl border border-border/60 bg-input/20 p-4">
-                <p className="mb-1.5 flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-muted-foreground">
-                  <Cpu className="h-3 w-3 text-accent" />
+              <section className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0C0E07] p-4">
+                <span
+                  aria-hidden
+                  className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#CCFF00]/40 to-transparent"
+                />
+                <p className="font-display mb-1.5 flex items-center gap-1.5 text-[0.62rem] uppercase tracking-[0.2em] text-zinc-500">
+                  <Cpu className="h-3 w-3 text-[#CCFF00]" />
                   AI Reasoning
                 </p>
-                <p className="text-pretty text-sm leading-relaxed">{reasoning}</p>
+                <p className="text-pretty text-sm font-light leading-relaxed text-zinc-300">{reasoning}</p>
               </section>
             )}
           </div>
@@ -922,27 +970,31 @@ function ProbabilityScores({ raw }: { raw?: string }) {
   const rows = pairs.filter((p) => !/^total$/i.test(p.name))
 
   return (
-    <div className="rounded-2xl border border-border/60 bg-input/20 p-4">
-      <p className="mb-3 flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-muted-foreground">
-        <Gauge className="h-3 w-3 text-accent" />
+    <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0C0E07] p-4">
+      <span
+        aria-hidden
+        className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#CCFF00]/40 to-transparent"
+      />
+      <p className="font-display mb-3 flex items-center gap-1.5 text-[0.62rem] uppercase tracking-[0.2em] text-zinc-500">
+        <Gauge className="h-3 w-3 text-[#CCFF00]" />
         Probability Scores
       </p>
       <div className="flex flex-col gap-2.5">
         {rows.map((p, i) => (
           <div key={i} className="flex items-center gap-3">
-            <span className="w-24 shrink-0 truncate text-[11px] text-muted-foreground">
+            <span className="font-display w-24 shrink-0 truncate text-[11px] font-light text-zinc-400">
               {p.name}
             </span>
-            <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-input/50">
+            <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
               <div
                 className={cn(
                   'h-full rounded-full',
-                  p.value >= 75 ? 'bg-up' : p.value >= 50 ? 'bg-accent' : 'bg-muted-foreground/50',
+                  p.value >= 75 ? 'bg-up' : p.value >= 50 ? 'bg-[#CCFF00]' : 'bg-zinc-600',
                 )}
                 style={{ width: `${p.value}%` }}
               />
             </div>
-            <span className="w-9 shrink-0 text-right font-mono text-[11px] font-semibold tabular-nums">
+            <span className="w-9 shrink-0 text-right font-mono text-[11px] font-semibold tabular-nums text-zinc-200">
               {p.value}%
             </span>
           </div>
@@ -974,13 +1026,17 @@ function IndicatorsCard({ raw }: { raw?: string }) {
   }
 
   return (
-    <div className="rounded-2xl border border-border/60 bg-input/20 p-4">
-      <p className="mb-2.5 flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-muted-foreground">
-        <Activity className="h-3 w-3 text-accent" />
+    <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0C0E07] p-4">
+      <span
+        aria-hidden
+        className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#CCFF00]/40 to-transparent"
+      />
+      <p className="font-display mb-2.5 flex items-center gap-1.5 text-[0.62rem] uppercase tracking-[0.2em] text-zinc-500">
+        <Activity className="h-3 w-3 text-[#CCFF00]" />
         Technical Indicators
       </p>
       {isNone || items.length === 0 ? (
-        <p className="text-xs leading-relaxed text-muted-foreground">
+        <p className="font-display text-xs font-light leading-relaxed text-zinc-400">
           No indicators on this chart — signal is based on pure price action.
         </p>
       ) : (
@@ -990,9 +1046,9 @@ function IndicatorsCard({ raw }: { raw?: string }) {
             return (
               <li
                 key={i}
-                className="flex items-center justify-between gap-3 rounded-xl border border-border/50 bg-background/30 px-3 py-2"
+                className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.06] bg-black/30 px-3 py-2"
               >
-                <span className="min-w-0 truncate text-xs text-foreground/90">
+                <span className="min-w-0 truncate text-xs text-zinc-300">
                   {item.replace(/\s*->\s*(UP|DOWN|NEUTRAL)\b/i, '')}
                 </span>
                 <span
@@ -1002,7 +1058,7 @@ function IndicatorsCard({ raw }: { raw?: string }) {
                       ? 'bg-up/15 text-up ring-up/30'
                       : bias === 'down'
                         ? 'bg-down/15 text-down ring-down/30'
-                        : 'bg-input/40 text-muted-foreground ring-border/60',
+                        : 'bg-white/[0.06] text-zinc-400 ring-white/10',
                   )}
                 >
                   {bias === 'neutral' ? 'NEUTRAL' : bias.toUpperCase()}
@@ -1016,49 +1072,39 @@ function IndicatorsCard({ raw }: { raw?: string }) {
   )
 }
 
-const statTileTones = {
-  emerald: {
-    card: 'border-emerald/25 from-emerald/12 via-emerald/5 hover:border-emerald/45 hover:from-emerald/12 hover:via-emerald/10',
-    chip: 'border-emerald/25 from-emerald/30 via-emerald/12 to-emerald/5',
-    icon: 'text-emerald',
-  },
-  gold: {
-    card: 'border-gold/25 from-gold/12 via-gold/5 hover:border-gold/45 hover:from-gold/12 hover:via-gold/10',
-    chip: 'border-gold/25 from-gold/30 via-gold/12 to-gold/5',
-    icon: 'text-gold',
-  },
-} as const
-
 function StatTile({
   icon: Icon,
   label,
   value,
   delay = 0,
-  tone = 'emerald',
 }: {
   icon: React.ComponentType<{ className?: string }>
   label: string
   value: string
   delay?: number
-  tone?: keyof typeof statTileTones
 }) {
-  const t = statTileTones[tone]
   return (
     <div
-      className={`animate-in fade-in slide-in-from-bottom-2 fill-mode-both group flex items-center gap-3 rounded-2xl border bg-gradient-to-br to-transparent px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-all duration-500 hover:-translate-y-0.5 ${t.card}`}
+      className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-b from-[#12150A] via-[#0C0E07] to-[#080A06] px-4 py-3 transition-[border-color,transform,box-shadow] duration-500 hover:-translate-y-0.5 hover:border-[#CCFF00]/35 hover:shadow-[0_12px_40px_-16px_rgba(204,255,0,0.25)]"
       style={{ animationDelay: `${delay}ms` }}
     >
       <span
-        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border bg-gradient-to-br shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-transform duration-300 group-hover:scale-110 ${t.chip}`}
-      >
-        <Icon className={`icon-float h-4 w-4 ${t.icon}`} />
+        aria-hidden
+        className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#CCFF00]/50 to-transparent"
+      />
+      <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#CCFF00]/25 bg-[#0A0C08] text-[#CCFF00] shadow-[0_0_18px_rgba(204,255,0,0.12)] transition-transform duration-300 group-hover:scale-105">
+        <Icon className="h-4 w-4" />
       </span>
-      <div className="min-w-0">
-        <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+      <div className="relative z-10 min-w-0">
+        <p className="font-display text-[0.62rem] uppercase tracking-[0.2em] text-zinc-500">
           {label}
         </p>
-        <p className="truncate text-sm font-bold capitalize">{value || '—'}</p>
+        <p className="font-display truncate text-sm font-semibold capitalize text-white">{value || '—'}</p>
       </div>
+      <span
+        aria-hidden
+        className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-[#CCFF00]/70 to-transparent transition-[width] duration-500 group-hover:w-full"
+      />
     </div>
   )
 }
