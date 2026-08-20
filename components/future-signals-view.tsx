@@ -37,19 +37,6 @@ type Signal = {
 
 type Phase = 'idle' | 'scanning' | 'ready'
 
-const TERMINAL_LINES = [
-  '$ vertex-ai --engine future-signals',
-  '> booting neural core ....... OK',
-  '> loading market feed ........ OK',
-  '> syncing candle streams ..... OK',
-  '> calibrating volatility model ',
-  '> mapping support / resistance ',
-  '> running reverse-logic scan ..',
-  '> aggregating confidence layers',
-  '> optimizing entry windows ....',
-  '> finalizing future signals ...',
-]
-
 function formatTime(d: Date) {
   return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
 }
@@ -78,7 +65,6 @@ function SignalStudio() {
   const [phase, setPhase] = useState<Phase>('idle')
   const [signals, setSignals] = useState<Signal[]>([])
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const terminalRef = useRef<HTMLDivElement | null>(null)
 
   // The category currently locked by the selection (only one allowed at a time)
   const lockedType = useMemo<MarketType | null>(() => {
@@ -158,11 +144,6 @@ function SignalStudio() {
     setSignals([])
     setPhase('scanning')
 
-    // Smoothly scroll the terminal into view so it's fully visible on any device.
-    requestAnimationFrame(() => {
-      terminalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    })
-
     // Map the server-issued picks onto the selected markets with entry times.
     const base = Date.now()
     let cumulative = 0
@@ -184,6 +165,24 @@ function SignalStudio() {
   }
 
   const disabledOther = lockedType !== null
+
+  // When scanning or showing results, replace the market picker entirely with
+  // the analyzing / results view (per product spec — market select page hides).
+  if (phase === 'scanning') {
+    return <SignalScanner selectedList={selectedList} count={count} />
+  }
+
+  if (phase === 'ready') {
+    return (
+      <SignalResults
+        signals={signals}
+        onReset={() => {
+          setPhase('idle')
+          setSignals([])
+        }}
+      />
+    )
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -224,15 +223,6 @@ function SignalStudio() {
               />
             </div>
           </div>
-
-          {/* Lock hint */}
-          {lockedType && (
-            <p className="flex items-center gap-2 rounded-xl border border-accent/25 bg-accent/10 px-3 py-2 text-xs text-accent">
-              <Check className="h-3.5 w-3.5" />
-              {lockedType === 'otc' ? 'OTC Market' : 'Real Market'} locked · clear selection to
-              switch categories.
-            </p>
-          )}
 
           {/* Search */}
           <div className="relative">
@@ -331,13 +321,6 @@ function SignalStudio() {
           </Button>
         </div>
       </section>
-
-      {/* Terminal + results */}
-      {phase !== 'idle' && (
-        <div ref={terminalRef} className="scroll-mt-20">
-          <SignalTerminal phase={phase} signals={signals} />
-        </div>
-      )}
     </div>
   )
 }
@@ -550,92 +533,210 @@ function SelectedBar({
   )
 }
 
-function SignalTerminal({ phase, signals }: { phase: Phase; signals: Signal[] }) {
-  const [visibleLines, setVisibleLines] = useState<number>(0)
-  const logEndRef = useRef<HTMLDivElement | null>(null)
+function SignalScanner({
+  selectedList,
+  count,
+}: {
+  selectedList: Market[]
+  count: number
+}) {
+  const [progress, setProgress] = useState(0)
+  const [stageIdx, setStageIdx] = useState(0)
+  const [tickerIdx, setTickerIdx] = useState(0)
+
+  const stages = useMemo(
+    () => [
+      'Initializing quantum lattice',
+      'Fetching liquidity depth',
+      'Modeling reverse-logic bias',
+      'Scoring confidence bands',
+      'Locking entry windows',
+    ],
+    [],
+  )
 
   useEffect(() => {
-    if (phase !== 'scanning') return
-    setVisibleLines(0)
-    const step = 10_000 / (TERMINAL_LINES.length + 1)
-    const timers = TERMINAL_LINES.map((_, i) =>
-      setTimeout(() => setVisibleLines(i + 1), step * (i + 1)),
-    )
-    return () => timers.forEach(clearTimeout)
-  }, [phase])
+    // Total 10s to match the parent timer; animate progress smoothly.
+    const start = Date.now()
+    const total = 10_000
+    const tick = setInterval(() => {
+      const elapsed = Date.now() - start
+      const p = Math.min(100, (elapsed / total) * 100)
+      setProgress(p)
+      setStageIdx(Math.min(stages.length - 1, Math.floor((p / 100) * stages.length)))
+      if (p >= 100) clearInterval(tick)
+    }, 80)
+    return () => clearInterval(tick)
+  }, [stages.length])
 
-  // Follow the typed log as it grows: scroll just far enough to keep the
-  // latest line in view, never past where the terminal text currently reaches.
   useEffect(() => {
-    if (phase !== 'scanning') return
-    logEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-  }, [visibleLines, phase])
+    if (selectedList.length <= 1) return
+    const t = setInterval(() => {
+      setTickerIdx((i) => (i + 1) % selectedList.length)
+    }, 900)
+    return () => clearInterval(t)
+  }, [selectedList.length])
+
+  const activeMarket = selectedList[tickerIdx] ?? selectedList[0]
 
   return (
-    <section className="border-luxe animate-in fade-in slide-in-from-bottom-3 overflow-hidden rounded-3xl bg-[oklch(0.2_0.006_240)] duration-500">
-      {/* terminal top bar */}
-      <div className="flex items-center gap-2 border-b border-border/60 bg-[oklch(0.235_0.006_240)] px-4 py-3">
-        <span className="h-3 w-3 rounded-full bg-destructive/70" />
-        <span className="h-3 w-3 rounded-full bg-[var(--gold)]/70" />
-        <span className="h-3 w-3 rounded-full bg-up/70" />
-        <span className="ml-2 flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
-          <Cpu className="h-3.5 w-3.5 text-accent" />
-          vertex@ai — future-signals
-        </span>
-      </div>
+    <section className="border-luxe surface-luxe card-corner-glow animate-in fade-in zoom-in-95 relative overflow-hidden rounded-3xl p-6 duration-500 sm:p-8">
+      {/* soft grid backdrop */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, var(--accent) 1px, transparent 1px), linear-gradient(to bottom, var(--accent) 1px, transparent 1px)',
+          backgroundSize: '38px 38px',
+        }}
+      />
 
-      <div className="p-5 sm:p-6">
-        {phase === 'scanning' ? (
-          <div className="flex flex-col items-center gap-6 py-4">
-            {/* Cube */}
-            <div className="cube-scene flex h-32 w-32 items-center justify-center">
-              <div
-                className="cube"
-                style={{ ['--cube-size' as string]: '96px', ['--cube-half' as string]: '48px' }}
-              >
-                {(['front', 'back', 'right', 'left', 'top', 'bottom'] as const).map((f) => (
-                  <div key={f} className={`cube__face cube__face--${f}`}>
-                    <Cpu strokeWidth={1.5} />
-                  </div>
-                ))}
-              </div>
-            </div>
+      <div className="relative z-10 flex flex-col items-center gap-6">
+        <div className="flex flex-col items-center gap-1.5 text-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-accent">
+            <span className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent" />
+            Vertex AI · Scanning
+          </span>
+          <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            <span className="text-gradient">Analyzing markets</span>
+          </h2>
+          <p className="text-xs text-muted-foreground sm:text-sm">
+            Generating {count} future signal{count === 1 ? '' : 's'} across{' '}
+            {selectedList.length} pair{selectedList.length === 1 ? '' : 's'}
+          </p>
+        </div>
 
-            {/* typed log */}
-            <div className="w-full max-w-md font-mono text-xs leading-relaxed sm:text-sm">
-              {TERMINAL_LINES.slice(0, visibleLines).map((line, i) => (
-                <p
-                  key={line}
-                  className={cn(
-                    'animate-in fade-in slide-in-from-left-1 duration-200',
-                    i === 0 ? 'text-accent' : 'text-up',
-                  )}
-                >
-                  {line}
-                </p>
-              ))}
-              <p className="mt-1 flex items-center gap-1 text-muted-foreground">
-                <span className="inline-block h-3.5 w-2 animate-pulse bg-accent" />
-                <span className="text-accent">analyzing entry windows…</span>
-              </p>
-              <div ref={logEndRef} aria-hidden="true" />
-            </div>
+        {/* Radar / orbit visual */}
+        <div className="relative flex h-56 w-56 items-center justify-center sm:h-64 sm:w-64">
+          {/* concentric rings */}
+          <span className="absolute inset-0 rounded-full border border-accent/25" />
+          <span className="absolute inset-[14%] rounded-full border border-accent/20" />
+          <span className="absolute inset-[28%] rounded-full border border-accent/15" />
+
+          {/* sweeping conic beam */}
+          <span
+            aria-hidden
+            className="scan-sweep absolute inset-0 rounded-full"
+            style={{
+              background:
+                'conic-gradient(from 0deg, transparent 0deg, var(--accent) 40deg, transparent 90deg)',
+              maskImage:
+                'radial-gradient(circle, transparent 18%, black 20%, black 100%)',
+              WebkitMaskImage:
+                'radial-gradient(circle, transparent 18%, black 20%, black 100%)',
+              opacity: 0.45,
+            }}
+          />
+
+          {/* orbit — outer, clockwise */}
+          <span className="orbit-cw absolute inset-[6%] rounded-full">
+            <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
+              <span className="block h-2 w-2 rounded-full bg-accent shadow-[0_0_14px_2px_var(--accent)]" />
+            </span>
+            <span className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2">
+              <span className="block h-1.5 w-1.5 rounded-full bg-up shadow-[0_0_10px_1px_var(--up)]" />
+            </span>
+          </span>
+
+          {/* orbit — inner, counter-clockwise */}
+          <span className="orbit-ccw absolute inset-[22%] rounded-full">
+            <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
+              <span className="block h-1.5 w-1.5 rounded-full bg-[var(--gold)] shadow-[0_0_10px_1px_var(--gold)]" />
+            </span>
+            <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <span className="block h-1.5 w-1.5 rounded-full bg-down shadow-[0_0_10px_1px_var(--down)]" />
+            </span>
+          </span>
+
+          {/* core */}
+          <div className="core-pulse relative flex h-24 w-24 items-center justify-center rounded-full border border-accent/40 bg-background/60 backdrop-blur-sm sm:h-28 sm:w-28">
+            <Radar className="h-9 w-9 text-accent" strokeWidth={1.6} />
           </div>
-        ) : (
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2">
-              <Radar className="icon-float h-4 w-4 text-accent" />
-              <h3 className="font-mono text-sm font-bold text-up">
-                {signals.length} future signal{signals.length === 1 ? '' : 's'} generated
+
+          {/* active pair badge floating below core */}
+          {activeMarket && (
+            <div className="animate-in fade-in absolute -bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full border border-border/70 bg-background/85 px-3 py-1.5 shadow-lg backdrop-blur-md duration-300">
+              <PairFlags base={activeMarket.base} quote={activeMarket.quote} size={16} />
+              <span className="font-mono text-xs font-bold tabular-nums">
+                {marketLabel(activeMarket)}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* stage + progress */}
+        <div className="w-full max-w-md">
+          <div className="mb-2 flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+            <span className="flex items-center gap-1.5 text-accent">
+              <Cpu className="h-3.5 w-3.5" />
+              {stages[stageIdx]}
+            </span>
+            <span className="tabular-nums text-accent">{Math.floor(progress)}%</span>
+          </div>
+          <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-input/40">
+            <span
+              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-accent/70 via-accent to-[var(--gold)] transition-[width] duration-150 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-1.5">
+            {stages.map((s, i) => (
+              <span
+                key={s}
+                className={cn(
+                  'rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-colors',
+                  i <= stageIdx
+                    ? 'border-accent/40 bg-accent/10 text-accent'
+                    : 'border-border/60 bg-input/20 text-muted-foreground',
+                )}
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function SignalResults({ signals, onReset }: { signals: Signal[]; onReset: () => void }) {
+  return (
+    <section className="border-luxe surface-luxe card-corner-glow animate-in fade-in slide-in-from-bottom-3 relative overflow-hidden rounded-3xl p-5 duration-500 sm:p-6">
+      <div className="relative z-10 flex flex-col gap-5">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <span className="btn-luxe flex h-9 w-9 items-center justify-center rounded-xl">
+              <Radar className="h-4 w-4 text-primary-foreground" />
+            </span>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent">
+                Vertex AI · Ready
+              </p>
+              <h3 className="font-display text-xl font-bold tracking-tight sm:text-2xl">
+                <span className="text-gradient">
+                  {signals.length} future signal{signals.length === 1 ? '' : 's'} generated
+                </span>
               </h3>
             </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {signals.map((s, i) => (
-                <SignalCard key={`${s.market.id}-${i}`} signal={s} index={i} />
-              ))}
-            </div>
           </div>
-        )}
+          <button
+            type="button"
+            onClick={onReset}
+            className="btn-luxe-outline flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold"
+          >
+            <X className="h-3.5 w-3.5" />
+            New scan
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {signals.map((s, i) => (
+            <SignalCard key={`${s.market.id}-${i}`} signal={s} index={i} />
+          ))}
+        </div>
       </div>
     </section>
   )
