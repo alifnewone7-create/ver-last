@@ -1,0 +1,20 @@
+{
+  "summary": "Verified welcome-luxe-border mobile animation disable fix on production Next.js build. All 4 requested checks pass: (1) mobile /dashboard both .welcome-luxe-border elements inside dashboard-hero-card and daily-limit-card have computed animation-name='none'; (2) desktop 1920x800 /dashboard keeps animation-name='welcome-luxe-border' (desktop unchanged); (3) mobile hamburger drawer opens (bounding box 304x700, aside visible, legible with Dashboard/OTC/Real Chart/Signals/Management/Logout items), page scrollWidth==375 (no horizontal overflow); (4) mobile /login welcome-luxe-border computed animation-name='none' with border edge still rendered. Compiled CSS chunk contains the rule '.welcome-luxe-border { animation: ... none !important; }' inside @media (max-width: 1023px) — no minifier dedupe issue.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100%"},
+  "test_credentials": "uitest1787059924@vertex.com / Test1234!",
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Fix in /app/app/globals.css @media (max-width:1023px) block disables .welcome-luxe-border animation on mobile. Verified in compiled CSS. Drawer smoothly slides in on mobile /dashboard. Hero-card and daily-limit-card use data-testid attributes for reliable selection.",
+  "rca of the issue": "N/A - fix verified working"
+}

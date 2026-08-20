@@ -1,0 +1,20 @@
+{
+  "summary": "Retest of iteration_7's single HIGH finding (minifier dropped unprefixed backdrop-filter on mobile). All three retest items PASS. Mobile 375x700: backdrop-filter computed as 'none' on hero badge (.backdrop-blur-md), all 10 .backdrop-blur-* elements on /, and on dashboard top-nav (.surface-luxe.backdrop-blur-xl -> bf=none, bg=rgba(10,12,7,0.97) opaque fallback intact). Desktop 1920x800 dashboard preserved: .surface-luxe.backdrop-blur-xl still bf='blur(24px)'. Regression checks pass: mobile body background-attachment='scroll, scroll, scroll' on both pages; desktop='fixed, fixed, fixed'; no horizontal overflow (scrollWidth==clientWidth==375 on / and /dashboard); login with provided test user reached /dashboard and dashboard-stat-plan rendered.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100%"},
+  "test_credentials": "uitest1787059924@vertex.com / Test1234! (login OK)",
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Iteration_7's fix (declaration order reversed: -webkit-backdrop-filter first, backdrop-filter last, plus '[class*=backdrop-blur-[]' in selector list) is confirmed working in the production Next.js build. getComputedStyle(el).backdropFilter returns 'none' on mobile for all backdrop-blur-* elements on / and /dashboard; desktop retains blur(24px). No further mobile scroll perf work required.",
+  "rca of the issue": "n/a — retest confirms prior fix landed."
+}

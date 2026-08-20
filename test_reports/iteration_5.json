@@ -1,0 +1,20 @@
+{
+  "summary": "Verified mobile overflow fix on /login and /registration. No horizontal overflow at any tested viewport (375x700, 390x844, 1920x800). Login page fits exactly (sh=ih=700 on mobile). Registration tab is 26px taller than viewport (sh=726, ih=700) which is legitimate content overflow (Full name field adds height) and acceptable per acceptance criteria. Tab switching remains instant (~107ms). Full login flow with Firebase test user succeeds and redirects to /dashboard with dashboard-stat-plan rendered.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "100%"},
+  "test_credentials": "uitest1787059924@vertex.com / Test1234! (Firebase, worked)",
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Auth pages fixed for mobile overflow. Measurements: login 375x700 -> sw/iw=375, sh/ih=700 (perfect). Registration tab -> sh=726, ih=700 (26px content overflow, acceptable, no horizontal overflow). Desktop 1920x800 -> no overflow, branding panel visible. Login flow to /dashboard works.",
+  "rca of the issue": "Fix applied by main agent (overflow-x-clip on <main>, w-full max-w-[40rem] on decorative glow, reduced mobile paddings) resolves both horizontal overflow (was sw=508 vs iw=375) and excess bottom scroll (was sh=718 vs ih=700). Verified in production build."
+}

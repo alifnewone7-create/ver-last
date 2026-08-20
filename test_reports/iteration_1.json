@@ -1,0 +1,44 @@
+{
+  "summary": "Frontend-only testing of the redesigned Vertex AI luxury dark-lime landing page (Next.js). Verified page loads without runtime errors, hero heading text, forbidden-content removal (no marquee, no 'AI Signal Engine' badge, no 'Vertex Neural Core' / 'Live · scanning markets' / '98.6%' inside hero chart card), candlestick SVG chart with BUY marker, all data-testids, navbar links + scroll-to-section, mobile hamburger menu, pricing card hrefs & target=_blank, CTA and footer navigation, and responsive layout at 390/768/1920 with no horizontal overflow.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "detailed_results": {
+    "hero_heading": "Trade with Intelligence. Win with Vertex AI. (correct)",
+    "forbidden_text_check": "All 4 forbidden strings absent from home page body",
+    "count_98.6%_on_page": 1,
+    "candle_chart_svg": "visible with BUY marker",
+    "nav_get_started_button": "-> /login OK",
+    "hero_cta_button": "-> /login OK",
+    "hero_pricing_button": "scrolls to /#pricing OK",
+    "pricing_quotex_button": "href=https://market-qx.pro/sign-up/?lid=619650 target=_blank",
+    "pricing_contact_admin_button": "href=https://t.me/Ayan_sx target=_blank",
+    "pricing_purchase_button": "href=https://t.me/Ayan_sx target=_blank",
+    "cta_create_account_button": "-> /registration OK",
+    "footer_privacy_link": "/privacy",
+    "footer_support_link": "https://t.me/Ayan_sx",
+    "mobile_nav_desktop_btn_hidden": true,
+    "mobile_hamburger_menu": "opens; contains 4 links + full-width CTA -> /login",
+    "horizontal_overflow_mobile_390": false,
+    "horizontal_overflow_tablet_768": false,
+    "console_errors": "Only benign Next.js font preload warnings, no runtime errors"
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "vertex-landing.tsx is ~675 lines and mixes 8+ components (Navbar, Hero, Stats, Features, HowItWorks, Pricing, CtaBand, Footer, CandleChart) in a single file. Consider splitting into /app/components/landing/*.tsx modules for maintainability (guideline: <700 lines and separation of concerns).",
+    "Support nav link uses href='https://t.me/Ayan_sx' with data-testid='nav-link-support' but the Footer also declares id='support' with scroll-mt-24 to be the scroll target — the anchor never actually scrolls to the footer because the Support nav link is external. This is intentional but slightly inconsistent with the other in-page anchors; consider removing id='support' on the footer or making the nav link scroll to it instead of Telegram.",
+    "Font preload warnings appear on every page load (5 woff2 files preloaded but not used within a few seconds). Not blocking, but indicates unused Google Font preloads from layout.tsx that could be trimmed."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (no backend in this project)", "frontend": "100%"},
+  "test_credentials": "N/A - landing page requires no auth",
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All landing-page acceptance criteria in the review request pass. /login and /registration pages render (styled) but their Firebase auth is out of scope. If future work touches vertex-landing.tsx, re-verify: no 'Vertex Neural Core'/'Live · scanning markets'/'AI Signal Engine' text, exactly one occurrence of '98.6%' in the stats row, mobile hamburger, and pricing external hrefs.",
+  "rca of the issue": "N/A - no bugs found"
+}

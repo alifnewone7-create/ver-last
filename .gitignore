@@ -1,0 +1,30 @@
+# v0 sandbox internal files
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+.snowflake/
+.v0-trash/
+.vercel/
+
+# Environment variables
+.env*.local
+
+# Common ignores
+node_modules
+.next/
+.DS_Store
+.vercel
+.next/dev/cache/turbopack/ee6e79b1/00000047.sst
+.pnpm-store/v10/files/38/8f0ba1f39d9a142936801bf2b2957d7d7cd43af0022f06ba6c2e3425dba9402948f6d54e99e0c0b14a20e399642e81d2bf2c90ea66908548f2b771b94e8fa7
+node_modules/.pnpm/@next+swc-linux-arm64-gnu@16.2.6/node_modules/@next/swc-linux-arm64-gnu/next-swc.linux-arm64-gnu.node
+.next/dev/cache/turbopack/ee6e79b1/00000318.sst
+.next/dev/cache/turbopack/ee6e79b1/00000090.sst
+.next/dev/cache/turbopack/ee6e79b1/00000091.sst
+.next/dev/cache/turbopack/ee6e79b1/00000046.sst
+.next/dev/cache/turbopack/ee6e79b1/00000031.sst
+node_modules/@next/swc-linux-arm64-musl/next-swc.linux-arm64-musl.node
+node_modules/@next/swc-linux-arm64-gnu/next-swc.linux-arm64-gnu.node
+.next/dev/cache/turbopack/ee6e79b1/00000034.sst
+.next/dev/cache/turbopack/ee6e79b1/00000299.sst
+.next/dev/cache/turbopack/ee6e79b1/00000350.sst
+.next/dev/cache/turbopack/ee6e79b1/00001840.sst

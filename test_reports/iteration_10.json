@@ -1,0 +1,71 @@
+{
+  "summary": "Frontend-only UI regression of the redesigned /live-signals page (new analyzing loader, no 'Live signal ready' heading, redesigned result card + direction hero, static clock face with rotating hands). Tested on desktop 1920x800 and mobile 375x800 with the provided Firebase test user. All 6 review-request checks pass on both viewports.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_evidence": {
+    "desktop_1920": {
+      "analyzing_stage_visible": true,
+      "smil_animateMotion_count": 0,
+      "loader_elements": {"gen-stage": true, "gen-ring_count": 2, "gen-ring--rev": true, "gen-orbit": true, "gen-core": true},
+      "analysis_line_cycled_midway": "Reading market pressure…",
+      "result_card_visible_after_~10s": true,
+      "live_signal_ready_text_present": false,
+      "result_card_is_first_content_below_nav": true,
+      "positions": {"cardTop": 138, "navBottom": 90, "prevSiblings": []},
+      "trade_chip": "CALL",
+      "direction_hero": "UP",
+      "entry_tile": "00:34",
+      "duration_tile": "1 Min",
+      "mtg_tile": "1 Step MTG Must",
+      "entry_time_diff_from_generation_minutes": 2,
+      "clock_animation": {"clock": "none", "mHand": "gen-spin", "hHand": "gen-spin"},
+      "instruction_strip": "Place the CALL at 00:34 · 1 Step MTG must if it loses",
+      "horizontal_overflow_px": 0,
+      "generate_new_signal_returns_to_picker": true
+    },
+    "mobile_375": {
+      "analyzing_stage_visible": true,
+      "smil_animateMotion_count": 0,
+      "loader_elements": {"gen-stage": true, "gen-ring_count": 2, "gen-orbit": true, "gen-core": true},
+      "loader_running_on_mobile_transform_only": {"ring": "gen-spin", "core": "gen-pulse", "orbit": "gen-spin"},
+      "result_card_visible_after_~10s": true,
+      "live_signal_ready_text_present": false,
+      "result_card_is_first_content_below_nav": true,
+      "positions": {"cardTop": 104, "navBottom": 72, "prevSiblings": []},
+      "trade_chip": "CALL",
+      "direction_hero": "UP",
+      "entry_tile": "00:35",
+      "duration_tile": "1 Min",
+      "mtg_tile": "1 Step MTG Must",
+      "entry_time_diff_from_generation_minutes": 1,
+      "clock_animation": {"clock": "none", "mHand": "gen-spin", "hHand": "gen-spin"},
+      "horizontal_overflow_px": 0,
+      "generate_new_signal_returns_to_picker": true
+    }
+  },
+  "checks_matrix": {
+    "1_analyzing_new_ring_loader_no_SMIL": "PASS",
+    "2_no_live_signal_ready_text_and_card_first_below_nav": "PASS",
+    "3_result_card_contents_chip_direction_tiles_instruction": "PASS",
+    "4_clock_face_static_hands_gen-spin": "PASS",
+    "5_entry_time_1_or_2_min_future": "PASS (desktop=+2min, mobile=+1min)",
+    "6_generate_new_signal_and_no_horizontal_overflow_both_viewports": "PASS"
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Only DOWN direction was not exercised in this run (server returned UP on both attempts). The CSS class sig-hero-down and PUT chip styling remain unverified in-runtime, though the code branch is symmetric to the UP path and static analysis of live-signals-view.tsx shows both branches are wired to the same testids and structure.",
+    "Minor: The analyzing stage timer is hard-coded to exactly 10s in a setTimeout. If the /api/signals/live POST is slow, the analyzing stage still runs the full 10s AFTER the response returns, so total wait can exceed 10s. Not a bug per spec but worth documenting in code comments."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (frontend-only per request)", "frontend": "100% (6/6 checks on both viewports)"},
+  "test_credentials": "uitest1787059924@vertex.com / Test1234! (from /app/memory/test_credentials.md) — used 2 additional live-signal credits during this run (1 desktop + 1 mobile).",
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Live-signals redesign fully verified on desktop 1920 and mobile 375. If retesting is needed, direction is server-random; to force a DOWN result branch, either mock /api/signals/live or retry generate a few times. Note there are only 35 live-signals credits/day per test user; main agent had already consumed 2 before this run and this run consumed 2 more (~4 total). All new test-ids present: live-analyzing-stage, live-signal-result-card, live-signal-trade-chip, live-signal-direction, live-signal-entry-time, live-signal-duration, live-signal-mtg."
+}

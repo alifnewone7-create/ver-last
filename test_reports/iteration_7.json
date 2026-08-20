@@ -1,0 +1,44 @@
+{
+  "summary": "Frontend-only verification of the mobile scroll performance CSS fix at mobile 375x700 and desktop 1920x800 across /, /login, /dashboard. Discovered ONE critical CSS-minification bug: the compiled production stylesheet is missing the standard `backdrop-filter: none !important;` declaration — only `-webkit-backdrop-filter:none!important` survived. All other fix goals (background-attachment: scroll on mobile / fixed on desktop, dark opaque surface fallbacks, halved decorative glow blurs, no horizontal overflow, login regression, hamburger drawer) verified working.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "app/globals.css compiled output (chunk /_next/static/chunks/11f1c0d51bq~0.css)",
+        "issue": "Inside the @media (max-width:1023px) block, the rule for `.surface-luxe, .clay-card, .clay-inset, .backdrop-blur-{sm,md,lg,xl,2xl,3xl}` compiled to ONLY `-webkit-backdrop-filter:none!important` — the standard unprefixed `backdrop-filter:none!important` was stripped by the CSS minifier (Lightning CSS de-duplicated the two identical declarations and kept only the -webkit one, since it appears last in source). Result: on modern Chromium/Firefox mobile the backdrop-filter still evaluates to `blur(24px)` / `blur(12px)` on every element that matched (verified via getComputedStyle on mobile 375px). This means the primary GPU-cost fix (kill live backdrop blurs while scrolling on mobile) is effectively a no-op on non-Safari mobile browsers. Visual appearance is unaffected because the opaque background-color fallback is still applied, but the scroll-lag issue the user reported is NOT actually mitigated.",
+        "selector": ".surface-luxe.backdrop-blur-xl (dashboard top-nav), .backdrop-blur-md (home hero badge), .backdrop-blur-xl (all pricing/feature cards on /)",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "In /app/app/globals.css MOBILE SCROLL PERFORMANCE block, swap the declaration order so the standard property comes LAST (put `-webkit-backdrop-filter: none !important;` first, then `backdrop-filter: none !important;`). This prevents the minifier from dropping the unprefixed one. Alternative fix: split into two separate rules, or add a decoy value diff (e.g. `filter: none !important;`) so the two declarations aren't seen as identical adjacent duplicates. Then run production build again.",
+    "After rebuild, re-verify on mobile 375px that computed `backdrop-filter` on `.surface-luxe`, `.clay-card`, and every `[class*=\"backdrop-blur\"]` element equals `none`."
+  ],
+  "critical_code_review_comments": [
+    "The current mobile performance CSS block relies on Tailwind utility class names (.backdrop-blur-sm/md/lg/xl/2xl/3xl) — if any component uses arbitrary values like `backdrop-blur-[10px]`, this selector list will miss them. Consider adding `[class*='backdrop-blur-[']` as well.",
+    "Assertion writers should note: body has 3 stacked background layers, so getComputedStyle(body).backgroundAttachment returns a comma-joined value like 'scroll, scroll, scroll' or 'fixed, fixed, fixed'. Any test must parse the CSV, not string-compare against a single keyword."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "~80% (visual + attachment + overflow + regression all pass; backdrop-filter kill fails on non-webkit due to minifier bug)"},
+  "test_credentials": "uitest1787059924@vertex.com / Test1234! — worked, logged into /dashboard, dashboard-stat-plan rendered.",
+  "seed_data_creation": "None",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "The mobile perf CSS fix is intact in source /app/app/globals.css but the compiled Next.js production CSS chunk (11f1c0d51bq~0.css) drops `backdrop-filter: none !important` due to CSS minifier deduplication with the adjacent `-webkit-backdrop-filter`. Only the webkit variant survives. Verify by curl-ing the CSS chunk and grepping for `backdrop-filter:none` (currently absent) after main agent's rebuild. When asserting body.background-attachment note it returns comma-separated per background layer (e.g. 'scroll, scroll, scroll' mobile / 'fixed, fixed, fixed' desktop). Login flow, dashboard-stat-plan render, hamburger drawer open, no horizontal overflow all working.",
+  "verified_pass": [
+    "Mobile home/login/dashboard: body & .home-bg have background-attachment:scroll on every layer.",
+    "Mobile home/login/dashboard: no horizontal overflow (scrollWidth==375).",
+    "Mobile dashboard: 3 of 4 .surface-luxe elements now show backdrop-filter:none (they didn't have .backdrop-blur-xl class so the .surface-luxe rule matched — but the ONLY -webkit-only override meant this actually only works on Safari; on Chromium during test the computed value came out 'none' likely because those cards never had a backdrop-blur utility class applied inline in the first place).",
+    "Mobile home: opaque dark surface fallback backgrounds visible; layout renders correctly (screenshots).",
+    "Mobile login: card renders with dark opaque surface, form usable, sw==375.",
+    "Login regression: uitest1787059924@vertex.com/Test1234! reaches /dashboard, dashboard-stat-plan visible.",
+    "Mobile hamburger: opens drawer with Dashboard, OTC Chart Analyzer, Real Chart Analyzer, Live Signals, Future Signals, Management, Log out — dark and legible.",
+    "Desktop home/dashboard: body backgroundAttachment='fixed, fixed, fixed' (unchanged).",
+    "Desktop dashboard: .surface-luxe.backdrop-blur-xl still has blur(24px) (unchanged)."
+  ],
+  "rca of the issue": "Reproduction: curl the served CSS chunk /_next/static/chunks/11f1c0d51bq~0.css and inspect the `@media (max-width:1023px)` block. Source globals.css has `backdrop-filter:none!important; -webkit-backdrop-filter:none!important;` but compiled output has only `-webkit-backdrop-filter:none!important`. Root cause: Next.js 16 uses Lightning CSS / SWC minifier which detects the two adjacent declarations with identical value on the same selector as duplicates and keeps the last one. Because `-webkit-backdrop-filter` appears second in source, it wins; the standard property is dropped. Modern mobile Chromium/Firefox read only the unprefixed `backdrop-filter`, so the override is invisible to them. Mitigation: reverse the declaration order in the source CSS (webkit first, standard last), OR use two separate rule blocks, OR break the value symmetry so the minifier can't dedupe."
+}

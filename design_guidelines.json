@@ -1,0 +1,107 @@
+{
+  "project_context": "Vertex AI - Redesign of landing page. Luxury dark mode with lime accents. Must be desktop and mobile friendly.",
+  "theme": "dark",
+  "typography": {
+    "font_family": "Outfit, sans-serif",
+    "headings": {
+      "style": "Highly contrasting weights. Mix font-light (300) with font-bold (700) or font-black (900) in the same heading to create tension.",
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-none text-white",
+      "h2": "text-3xl sm:text-4xl lg:text-5xl tracking-tight text-white",
+      "h3": "text-xl sm:text-2xl font-medium text-white",
+      "h4": "text-lg sm:text-xl font-medium text-white"
+    },
+    "body": "text-base md:text-lg text-[#A1A5A1] leading-relaxed",
+    "labels": "text-xs font-bold tracking-[0.2em] uppercase text-[#CCFF00]"
+  },
+  "colors": {
+    "background": {
+      "primary": "#020302",
+      "secondary": "#0A0B0A",
+      "tertiary": "#111311"
+    },
+    "accent": {
+      "lime": "#CCFF00",
+      "lime_glow": "rgba(204, 255, 0, 0.15)",
+      "lime_muted": "rgba(204, 255, 0, 0.4)"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A1A5A1",
+      "muted": "#555955",
+      "inverse": "#020302"
+    },
+    "borders": {
+      "subtle": "#1A1C1A",
+      "hover": "#334000",
+      "focus": "#CCFF00"
+    }
+  },
+  "visual_enhancers": {
+    "glassmorphism": "Use for navbar: backdrop-blur-xl bg-[#0A0B0A]/80 border border-[#1A1C1A]. MUST have solid backdrop for readability.",
+    "clay_buttons": "MUST KEEP: 3D tactile buttons (btn-clay). background: #CCFF00, text: #020302, font-weight: 600, border-radius: 9999px. Use box-shadow to create 3D effect (inset 0 -4px 0 rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.4), 0 4px 10px rgba(204,255,0,0.2)). On active, press down.",
+    "glow_effects": "Use subtle radial gradients with lime_glow behind hero and pricing sections to break the void.",
+    "textures": "Optional subtle noise/grain texture on #020302 background to create a physical luxury feel."
+  },
+  "grids_and_layouts": {
+    "spacing": "Generous. Use py-24 or py-32 for section spacing on desktop, py-16 on mobile.",
+    "features_bento": "Asymmetric bento grid for 6 features. Desktop: grid-cols-12. E.g., row 1: col-span-7, col-span-5. row 2: col-span-4, col-span-4, col-span-4. row 3: col-span-12 or col-span-8 and col-span-4.",
+    "pricing_layout": "Two distinct columns (lg:grid-cols-2 gap-8). Left: Free Access card. Right: Buy License card. Make them asymmetrical in design."
+  },
+  "sections": {
+    "navbar": "Sticky floating pill. Logo + 'Vertex AI' left, links center (hidden on mobile), CTA right. Keep as before.",
+    "hero": "H1: 'Trade with Intelligence. Win with Vertex AI.' with mixed font weights. Subcopy. Buttons: 'Get Vertex AI' (clay) and 'View Pricing' (outline/ghost). Glass hero card with animated SVG candlestick chart + floating 'BUY' marker + 'Powered by Vertex AI real-time algorithm'. Fading lime divider below card. REMOVE stats strip, REMOVE micro-labels.",
+    "features": "Title: 'Built for serious traders'. 6 features (Neural Signal Engine, Chart Vision AI, Smart Entry Routing, Robotic Execution Logic, Live Market Telemetry, Precision Risk Guard). REMOVE 01/02 numbering. Add lucide icons.",
+    "how_it_works": "3 steps (Connect account, AI scans markets, Trade signals). Horizontal timeline flow with glowing connecting lines.",
+    "pricing": "Title: 'Choose your access'. Redesign completely. Free Access ($0): Step-by-step vertical list (Create Account, Deposit $50, Verify UID) inside card, 2 buttons at bottom. Buy License ($99/mo): VIP layout, 4 perks list, 'Purchase License' button. Give the $99/mo card a premium tracing beam border or glow.",
+    "cta_band": "Deep #111311 container, radial lime glow. 'Start your trading career with Vertex AI'. 'Create free account' clay button.",
+    "footer": "py-24. Top border #1A1C1A. Logo, Privacy Policy, Support, copyright. Distinct trading risk disclaimer box (border-[#1A1C1A] text-[#555955])."
+  },
+  "motion": {
+    "hero_card": "Gentle float (translateY -10px to 0px).",
+    "candlestick": "SVG animations simulating trading ticks.",
+    "scroll": "Fade up and stagger entrance for bento grid cards.",
+    "buttons": "Active state for clay buttons: translate-y-[2px] shadow-[inset_0_-2px_0_rgba(0,0,0,0.2)] to simulate physical press."
+  },
+  "accessibility": {
+    "contrast": "Ensure #CCFF00 on #020302 exceeds 4.5:1. For text on #CCFF00, use #020302.",
+    "focus": "focus:ring-2 focus:ring-[#CCFF00] focus:ring-offset-2 focus:ring-offset-[#020302]",
+    "aria": "Include aria-labels for mobile menus and interactive SVG icons."
+  },
+  "media": {
+    "image_urls": {
+      "logo": {
+        "url": "/vertex-logo.png",
+        "description": "Vertex AI Logo",
+        "category": "navbar, footer"
+      }
+    }
+  },
+  "components": {
+    "button_clay": "Requires custom CSS for 3D look. lime bg, #020302 text.",
+    "card": "bg-[#0A0B0A] border border-[#1A1C1A] rounded-2xl p-6 md:p-8 overflow-hidden hover:border-[#334000] transition-colors"
+  },
+  "instructions_to_main_agent": [
+    "Build the redesign using React (.js files, NOT .tsx) and Tailwind CSS.",
+    "Implement the strict Dark/Lime luxury aesthetic as defined.",
+    "Use Outfit font globally.",
+    "Ensure 'btn-clay' class is globally defined in CSS to keep the 3D clay-style lime buttons exactly as requested.",
+    "Strictly follow the user's explicit removals: NO stats strip in the hero, NO micro-labels ('Vertex Neural Core', 'AI Signal Engine · v4.2 live') in the hero card.",
+    "The hero card MUST ONLY contain the SVG candlestick chart, floating 'BUY' marker, and caption 'Powered by Vertex AI real-time algorithm'.",
+    "Add the fading lime divider under the hero card.",
+    "Remove '01/02' numbers from the features section.",
+    "Redesign the 'Choose your access' section to look professional, distinct, and premium. Contrast the Free (step-by-step UI) and Paid ($99/mo) paths effectively.",
+    "All interactive elements MUST have data-testid attributes.",
+    "Ensure fully responsive layout (mobile-first)."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Avoid generic, 'on distribution' outputs. Make creative, distinctive frontends that surprise and delight.",
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+    "Create depth through layered design elements with z-index hierarchy and 1px borders.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Every interaction needs micro-animations - hover states, transitions, entrance animations.",
+    "DO NOT apply universal transition (transition: all). Use specific properties.",
+    "DO NOT center align the app container. Align text logically.",
+    "DO NOT use complete transparent background in header or overlays. Ensure text readability with backdrop blur and semi-transparent solid colors.",
+    "All interactive and key informational elements MUST include a data-testid attribute to facilitate robust automated testing."
+  ]
+}

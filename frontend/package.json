@@ -1,0 +1,7 @@
+{
+  "name": "frontend-shim",
+  "private": true,
+  "scripts": {
+    "start": "cd /app && yarn next start -p ${PORT:-3000} -H 0.0.0.0"
+  }
+}

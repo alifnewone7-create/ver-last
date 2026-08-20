@@ -1,0 +1,19 @@
+{
+  "summary": "Frontend-only verification of auth-tab/switch-link animation removal in /app/components/auth-card.tsx. Tested on desktop (1920x800) and mobile (375x800). Confirmed transition-duration is 0s on data-testid auth-tab-login, auth-tab-registration, and auth-switch-link. Tab clicks switch modes instantly, update URL via replaceState between /login and /registration, and swap heading ('Welcome back' <-> 'Create your account') and Full name field. Login regression passes: sign-in with test user redirects to /dashboard where all three stat cards (dashboard-stat-plan/tools/engine) render.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {"backend": "not tested", "frontend": "100%"},
+  "test_credentials": "uitest1787059924@vertex.com / Test1234!",
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Auth tabs: data-testid auth-tab-login/auth-tab-registration; footer switch: auth-switch-link. Computed transitionDuration=0s and transitionProperty=all on all three. URL updates via history.replaceState (no navigation) between /login and /registration. Login test user works; dashboard stat cards render after ~1-2s post-redirect (need explicit wait_for_selector on dashboard-stat-plan, initial dashboard shows 'Loading...' spinner)."
+}
