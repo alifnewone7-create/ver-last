@@ -102,13 +102,13 @@ const STEPS = [
     icon: ScanSearch,
     step: '02',
     title: 'AI scans the markets',
-    desc: 'The Vertex core sweeps 40+ pairs in real time, scoring every setup against its neural playbook.',
+    desc: 'Get an instant chart analysis or live signal in a single tap — no waiting, no guesswork.',
   },
   {
     icon: Rocket,
     step: '03',
     title: 'Trade the signals',
-    desc: 'Receive crystal-clear BUY / SELL calls with entry, expiry and confidence — then execute.',
+    desc: 'Grab instant signals with the proper entry time and start booking profits with confidence.',
   },
 ]
 
