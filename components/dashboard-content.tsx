@@ -144,6 +144,7 @@ export function DashboardContent({ profile }: { profile: UserProfile }) {
                       height={112}
                       className="h-full w-full object-cover"
                       priority
+                      unoptimized
                     />
                   </span>
                 </span>
@@ -165,8 +166,7 @@ export function DashboardContent({ profile }: { profile: UserProfile }) {
                     </span>
                   </div>
                   <p className="font-display mx-auto mt-3 max-w-md text-pretty text-sm font-light leading-relaxed text-zinc-400 sm:mx-0">
-                    Your intelligent trading companion — analyzing OTC and real
-                    market charts to deliver fast, precise, AI-powered signals.
+                    Scan any OTC or real market chart in seconds and get precise, AI-powered signals with the perfect entry time.
                   </p>
                 </div>
               </div>

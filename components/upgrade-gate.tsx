@@ -39,24 +39,24 @@ const FREE_STEPS = [
   {
     icon: UserPlus,
     title: 'Create Account',
-    desc: 'Register through our exclusive partner link.',
+    desc: 'Use our exclusive partner link to register your trading account.',
   },
   {
     icon: Wallet,
     title: 'Deposit Capital',
-    desc: 'Minimum $50 to activate your balance.',
+    desc: 'Minimum $60 for your trading balance to get started.',
   },
   {
     icon: ShieldCheck,
     title: 'Verify UID',
-    desc: 'Send your UID to support for instant access.',
+    desc: 'Send your UID to our support team for instant verification.',
   },
 ]
 
 const LICENSE_PERKS = [
   'Skip broker registration entirely',
   'Direct, unrestricted access',
-  '1-month full license, instant activation',
+  'Lifetime full license, instant activation',
   'Priority support included',
 ]
 
@@ -252,160 +252,182 @@ export function UpgradeGateProvider({ children }: { children: ReactNode }) {
               </div>
             </div>
           ) : (
-            <div className="border-luxe surface-luxe relative z-10 max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-[28px] p-6 shadow-2xl shadow-primary/25 sm:p-8">
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
-
+            <div className="relative z-10 max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[28px] border border-white/[0.08] bg-[#060806] p-5 shadow-[0_12px_48px_rgba(0,0,0,0.55)] sm:p-8">
               <button
                 type="button"
                 onClick={close}
-                className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background/40 text-muted-foreground transition-colors hover:text-foreground"
+                className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.08] bg-black/40 text-zinc-400 transition-colors hover:text-white"
                 aria-label="Close dialog"
               >
                 <X className="h-4 w-4" />
               </button>
 
-              <div className="text-center">
-                <span className="border-luxe surface-luxe inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-medium text-muted-foreground">
-                  <Crown className="h-3.5 w-3.5 text-primary" />
+              {/* section header — same shape as homepage */}
+              <div className="mx-auto max-w-2xl text-center">
+                <span
+                  className="font-display inline-flex max-w-full items-center justify-center gap-2 rounded-lg border border-[#CCFF00]/25 px-3 py-1.5 text-[0.625rem] uppercase leading-tight tracking-[0.16em] text-zinc-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] sm:rounded-xl sm:px-5 sm:py-2.5 sm:text-xs sm:tracking-[0.24em]"
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(135deg, rgba(204,255,0,0.18) 0%, rgba(204,255,0,0.06) 45%, rgba(255,255,255,0.02) 100%)',
+                  }}
+                >
+                  <Crown className="h-3 w-3 text-[#CCFF00] sm:h-3.5 sm:w-3.5" />
                   Choose your access
                 </span>
-                <h2 className="mt-3 text-balance text-2xl font-bold tracking-tight sm:text-3xl">
+                <h2
+                  id="upgrade-title"
+                  className="font-display mt-5 text-balance text-2xl font-medium tracking-tight text-white sm:text-3xl md:text-4xl"
+                >
                   Two ways to start with{' '}
-                  <span className="text-gradient">Vertex AI</span>
+                  <span className="text-[#CCFF00]">Vertex AI</span>
                 </h2>
-                <p className="mx-auto mt-2 max-w-md text-pretty text-sm text-muted-foreground">
+                <p className="font-display mx-auto mt-4 max-w-md text-pretty text-sm font-light text-zinc-400 sm:text-base">
                   Get free access through our partner broker, or buy a direct
                   license and skip the setup.
                 </p>
               </div>
 
-              <div className="mt-6 grid gap-5 lg:grid-cols-2">
-                {/* Free Access */}
-                <div className="border-luxe surface-luxe relative flex flex-col rounded-3xl p-5 shadow-xl shadow-black/20 sm:p-6">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold">Free Access</h3>
-                    <span className="rounded-full bg-[var(--up)]/15 px-3 py-1 text-xs font-semibold text-[var(--up)]">
-                      $0 / partner
-                    </span>
+              <div className="mx-auto mt-8 grid max-w-5xl gap-5 lg:grid-cols-2 lg:gap-7">
+                {/* ── free access ── */}
+                <div className="relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-[#070907]/80 p-6 shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-8">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="font-display text-xl tracking-tight text-white sm:text-2xl">
+                      Free Access
+                    </h3>
+                    <div className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                      $0
+                    </div>
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
+                  <p className="font-display mt-3 text-sm font-light text-zinc-400">
                     Follow these 3 simple steps to unlock Vertex AI for free.
                   </p>
 
-                  <ol className="mt-5 flex flex-1 flex-col gap-3">
-                    {FREE_STEPS.map((step, i) => (
-                      <li
-                        key={step.title}
-                        className="flex gap-3 rounded-2xl border border-border bg-background/40 p-3"
-                      >
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-sm font-bold text-primary">
-                          {i + 1}
-                        </span>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <step.icon className="h-4 w-4 text-foreground" />
-                            <p className="text-sm font-semibold leading-tight">
-                              {step.title}
+                  {/* vertical step timeline */}
+                  <div className="relative mt-7 flex-1">
+                    <div
+                      aria-hidden="true"
+                      className="absolute bottom-5 left-[19px] top-5 w-px"
+                      style={{
+                        background:
+                          'linear-gradient(180deg, rgba(204,255,0,0.45), rgba(204,255,0,0.1))',
+                      }}
+                    />
+                    <ol className="flex flex-col gap-6">
+                      {FREE_STEPS.map((step, i) => (
+                        <li key={step.title} className="relative flex gap-4">
+                          <span className="font-display relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#CCFF00]/35 bg-[#0A0C08] text-xs font-semibold text-[#CCFF00] shadow-[0_0_16px_rgba(204,255,0,0.12)]">
+                            {i + 1}
+                          </span>
+                          <div className="pt-0.5">
+                            <div className="flex items-center gap-2">
+                              <step.icon className="h-4 w-4 text-[#CCFF00]" />
+                              <p className="font-display text-sm font-medium text-zinc-100">
+                                {step.title}
+                              </p>
+                            </div>
+                            <p className="font-display mt-1.5 text-sm font-light leading-relaxed text-zinc-500">
+                              {step.desc}
                             </p>
                           </div>
-                          <p className="mt-1 text-xs text-muted-foreground">
-                            {step.desc}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
 
-                  <div className="mt-5 flex flex-col gap-3">
-                    <Button
-                      variant="outline"
-                      nativeButton={false}
-                      render={
-                        <a
-                          href="https://broker-qx.pro/sign-up/?lid=1020815"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        />
-                      }
-                      className="btn-luxe-outline h-11 w-full gap-2 rounded-xl border-transparent text-sm font-semibold"
+                  <div className="mt-8 flex flex-col gap-3">
+                    <a
+                      href="https://broker-qx.pro/sign-up/?lid=1020815"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-clay-plum font-display inline-flex h-12 w-full items-center justify-center gap-2 px-6 text-sm sm:text-base"
                     >
-                      <UserPlus className="h-[18px] w-[18px]" />
+                      <UserPlus className="h-4 w-4" />
                       Create Quotex Account
-                    </Button>
-                    <Button
-                      variant="outline"
-                      nativeButton={false}
-                      render={
-                        <a
-                          href="https://t.me/Miraj_X_Trader_Official"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        />
-                      }
-                      className="group h-11 w-full gap-2 rounded-xl border border-accent/40 bg-accent/10 text-sm font-semibold text-accent transition-shadow hover:bg-accent/12"
+                    </a>
+                    <a
+                      href="https://t.me/Miraj_X_Trader_Official"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-clay-dark font-display inline-flex h-12 w-full items-center justify-center gap-2 px-6 text-sm sm:text-base"
                     >
-                      <Headset className="h-[18px] w-[18px]" />
+                      <Headset className="h-4 w-4 text-[#CCFF00]" />
                       Contact Admin
-                    </Button>
+                    </a>
                   </div>
                 </div>
 
-                {/* Buy License */}
-                <div className="surface-luxe relative flex flex-col overflow-hidden rounded-3xl border border-primary/40 p-5 shadow-2xl shadow-primary/20 ring-1 ring-primary/20 sm:p-6">
-                  <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/12 blur-3xl" />
+                {/* ── buy license (premium) ── */}
+                <div className="relative flex flex-col overflow-hidden rounded-3xl border border-[#CCFF00]/25 bg-[#090B06]/90 p-6 shadow-[0_12px_48px_rgba(0,0,0,0.55)] backdrop-blur-xl sm:p-8">
+                  <span aria-hidden="true" className="welcome-luxe-border rounded-3xl" />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -top-28 left-1/2 h-64 w-[30rem] -translate-x-1/2 rounded-full blur-[80px]"
+                    style={{
+                      background:
+                        'radial-gradient(ellipse at center, rgba(204,255,0,0.2), transparent 70%)',
+                    }}
+                  />
 
-                  <div className="relative flex items-center justify-between">
-                    <h3 className="text-lg font-bold">Buy License</h3>
-                    <span className="rounded-full bg-primary/12 px-3 py-1 text-xs font-semibold text-primary">
-                      Direct access
+                  <div className="relative">
+                    <h3 className="font-display text-xl tracking-tight text-white sm:text-2xl">
+                      Buy License
+                    </h3>
+                  </div>
+
+                  <div className="relative mt-5 flex items-end gap-2">
+                    <span className="font-display text-5xl font-semibold tracking-tight text-white sm:text-6xl">
+                      $50
+                    </span>
+                    <span className="font-display mb-2 text-sm text-zinc-500">
+                      / Lifetime
                     </span>
                   </div>
-                  <p className="relative mt-2 text-sm text-muted-foreground">
+                  <p className="font-display relative mt-3 text-sm font-light text-zinc-400">
                     Skip broker registration. Purchase a direct, unrestricted
                     1-month license immediately.
                   </p>
 
-                  <div className="relative mt-5 flex items-end gap-1">
-                    <span className="text-gradient text-4xl font-extrabold tracking-tight">
-                      $99
-                    </span>
-                    <span className="mb-1 text-sm text-muted-foreground">
-                      / month
-                    </span>
-                  </div>
+                  <div
+                    aria-hidden="true"
+                    className="relative mt-6 h-px w-full"
+                    style={{
+                      background:
+                        'linear-gradient(90deg, rgba(204,255,0,0.35), transparent)',
+                    }}
+                  />
 
-                  <ul className="relative mt-5 flex flex-1 flex-col gap-3">
+                  <ul className="relative mt-6 flex flex-1 flex-col gap-4">
                     {LICENSE_PERKS.map((perk) => (
-                      <li key={perk} className="flex items-start gap-3 text-sm">
-                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-foreground/10 text-foreground">
-                          <Check className="h-3.5 w-3.5" />
+                      <li key={perk} className="flex items-start gap-3">
+                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#CCFF00] shadow-[0_0_10px_rgba(204,255,0,0.35)]">
+                          <Check className="h-3 w-3 text-black" />
                         </span>
-                        <span className="text-foreground/90">{perk}</span>
+                        <span className="font-display text-sm font-light text-zinc-200">
+                          {perk}
+                        </span>
                       </li>
                     ))}
                   </ul>
 
-                  <Button
-                    nativeButton={false}
-                    render={
-                      <a
-                        href="https://t.me/Miraj_X_Trader_Official"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      />
-                    }
-                    className="btn-luxe relative mt-5 h-11 w-full gap-2 rounded-xl text-sm font-semibold"
+                  <a
+                    href="https://t.me/Miraj_X_Trader_Official"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-clay font-display relative mt-8 inline-flex h-12 w-full items-center justify-center gap-2 px-6 text-sm sm:text-base"
                   >
-                    <KeyRound className="h-[18px] w-[18px]" />
+                    <KeyRound className="h-4 w-4" />
                     Purchase License
-                  </Button>
+                  </a>
+                  <p className="font-display relative mt-4 text-center text-xs text-zinc-600">
+                    Instant activation · priority support included
+                  </p>
                 </div>
               </div>
 
               <button
                 type="button"
                 onClick={() => setShowPlans(false)}
-                className="mx-auto mt-5 block text-xs font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+                className="font-display mx-auto mt-6 block text-xs font-medium text-zinc-500 underline-offset-4 transition-colors hover:text-white hover:underline"
               >
                 Back
               </button>
