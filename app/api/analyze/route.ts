@@ -13,8 +13,8 @@ export const maxDuration = 60
 const API_KEYS = Array.from(
   new Set(
     [
-      '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',
-      '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',
+      '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',
+      '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',
       // Add more keys here (one per line), e.g.:
       // 'gsk_yourNextAccountKeyHere',
     ]
